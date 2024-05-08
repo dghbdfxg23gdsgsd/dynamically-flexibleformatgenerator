@@ -1,14 +1,15 @@
-const senderSignature = aptos.transaction.sign({ signer: alice, transaction });
-
-// Sponsor signs
-const sponsorSignature = aptos.transaction.signAsFeePayer({
-  signer: sponsor,
-  transaction,
-});
-
-// Submit the transaction to chain
-const committedTxn = await aptos.transaction.submit.simple({
-  transaction,
-  senderAuthenticator: senderSignature,
-  feePayerAuthenticator: sponsorSignature,
-});
+const binarySearch = (arr, target) => {
+  let left = 0;
+  let right = arr.length - 1;
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    if (arr[mid] === target) {
+      return mid;
+    } else if (arr[mid] < target) {
+      left = mid + 1;
+    } else {
+      right = mid - 1;
+    }
+  }
+  return -1;
+};
