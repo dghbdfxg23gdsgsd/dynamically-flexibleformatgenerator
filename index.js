@@ -1,18 +1,14 @@
-function longestPalindromeSubseq(s) {
-  const n = s.length;
-  const dp = Array.from(Array(n), () => Array(n).fill(0));
-  for (let i = 0; i < n; i++) {
-    dp[i][i] = 1;
-  }
-  for (let len = 2; len <= n; len++) {
-    for (let i = 0; i < n - len + 1; i++) {
-      const j = i + len - 1;
-      if (s[i] === s[j]) {
-        dp[i][j] = 2 + dp[i + 1][j - 1];
-      } else {
-        dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
+function wordBreak(s, wordDict) {
+  const wordSet = new Set(wordDict);
+  const dp = new Array(s.length + 1).fill(false);
+  dp[0] = true;
+  for (let end = 1; end <= s.length; end++) {
+    for (let start = 0; start < end; start++) {
+      if (dp[start] && wordSet.has(s.substring(start, end))) {
+        dp[end] = true;
+        break;
       }
     }
   }
-  return dp[0][n - 1];
+  return dp[s.length];
 }
