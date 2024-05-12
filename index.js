@@ -1,14 +1,34 @@
-function wordBreak(s, wordDict) {
-  const wordSet = new Set(wordDict);
-  const dp = new Array(s.length + 1).fill(false);
-  dp[0] = true;
-  for (let end = 1; end <= s.length; end++) {
-    for (let start = 0; start < end; start++) {
-      if (dp[start] && wordSet.has(s.substring(start, end))) {
-        dp[end] = true;
-        break;
-      }
-    }
+function minWindow(s, t) {
+  const map = new Map();
+  for (const char of t) {
+    map.set(char, (map.get(char) || 0) + 1);
   }
-  return dp[s.length];
+  let required = map.size;
+  let left = 0;
+  let right = 0;
+  let minLen = Infinity;
+  let substrStart = 0;
+  while (right < s.length) {
+    const char = s[right];
+    if (map.has(char)) {
+      map.set(char, map.get(char) - 1);
+      if (map.get(char) === 0) required--;
+    }
+    while (required === 0) {
+      if (right - left + 1 < minLen) {
+        minLen = right - left + 1;
+        substrStart = left;
+      }
+      const leftChar = s[left];
+      if (map.has(leftChar)) {
+        map.set(leftChar, map.get(leftChar) + 1);
+        if (map.get(leftChar) > 0) required++;
+      }
+      left++;
+    }
+    right++;
+  }
+  return minLen === Infinity
+    ? ""
+    : s.substring(substrStart, substrStart + minLen);
 }
